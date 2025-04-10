@@ -1,0 +1,514 @@
+/* =================================================
+   Fichier : mise_en_page.css
+   -------------------------------------------------
+   Mise en page pour :
+   - Écran de connexion
+   - Tableau de bord Patient
+   - Tableau de bord Médecin
+   - Cartes par patient (prescriptions côté médecin)
+   - Cartes médicaments améliorées
+   - Timers, messagerie, etc.
+   - Ajout de marge sous les boutons d'action
+   ================================================
+*/
+
+/* 
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SCOPE 1 : ÉCRAN DE CONNEXION
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Gère l'affichage du bloc de connexion, son centrage et son style.
+*/
+#ecran-connexion {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+#ecran-connexion h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--couleur-primaire);
+}
+
+.formulaire-connexion {
+    background-color: var(--couleur-carte);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--ombre-legere);
+}
+
+/* 
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SCOPE 2 : TABLEAU DE BORD (Patient/Médecin)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Gestion du header, conteneur d'onglets, et affichage/masque de l'un ou l'autre.
+*/
+#tableau-bord-patient.masque,
+#tableau-bord-medecin.masque {
+    /* On masque le tableau de bord inutile */
+}
+
+.en_tete {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+
+.en_tete h1 {
+    color: var(--couleur-primaire);
+    font-size: 24px;
+}
+
+.info-utilisateur {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Conteneur global pour les onglets */
+.conteneur-onglets {
+    background-color: var(--couleur-carte);
+    border-radius: 8px;
+    box-shadow: var(--ombre-legere);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+/* Barre d'onglets */
+.zone-onglets {
+    display: flex;
+    background-color: var(--couleur-secondaire);
+}
+
+/* Boutons d'onglets */
+.onglet-bouton {
+    padding: 12px 20px;
+    background-color: transparent;
+    color: var(--couleur-texte);
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    flex: 1;
+}
+.onglet-bouton.actif {
+    background-color: var(--couleur-carte);
+    border-bottom: 3px solid var(--couleur-primaire);
+    color: var(--couleur-primaire);
+}
+
+/* Panneau correspondant à chaque onglet */
+.panneau-onglet {
+    display: none;
+    padding: 20px;
+}
+.panneau-onglet.actif {
+    display: block;
+}
+
+/* 
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SCOPE 3 : BOUTONS D'ACTION (+)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Boutons comme "Nouveau Médicament", "Nouvelle Prescription", etc. On ajoute une marge au-dessous.
+*/
+.bouton-action {
+    display: inline-block;
+    background-color: var(--couleur-primaire);
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-bottom: 15px; /* Espace sous ce bouton */
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+.bouton-action:hover {
+    background-color: #1565c0; /* nuance plus foncée */
+}
+
+/* 
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SCOPE 4 : PARTIE PATIENT (Prescriptions & Timers)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Liste, carte principale de contrôle, section "Mes Prescriptions", etc.
+*/
+
+/* Liste de prescriptions du patient (verticale) */
+.liste-prescriptions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Carte principale de contrôle du pilulier */
+.carte-principale-controle {
+    background-color: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-left: 4px solid #1976d2;
+}
+
+/* Version "ergonomique" centrée */
+.carte-controle-ergonomique {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.carte-principale-controle .titre-prescription {
+    color: #1976d2;
+    font-weight: 700;
+}
+
+/* Indicateur d'état (ouvert/fermé) */
+.statut-pilulier {
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.statut-pilulier.statut-ouvert {
+    color: var(--couleur-succes);
+}
+.statut-pilulier.statut-ferme {
+    color: var(--couleur-erreur);
+}
+
+/* Contrôles du pilulier (ouvrir, fermer) */
+.controles-pilulier {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+}
+.controles-pilulier h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #1976d2;
+    border-bottom: 1px dashed rgba(25, 118, 210, 0.3);
+    padding-bottom: 8px;
+}
+.actions-prescription {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+.actions-prescription button {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+.bouton-ouvrir {
+    background-color: #1976d2;
+    color: white;
+}
+.bouton-ouvrir:hover:not([disabled]) {
+    background-color: #1565c0;
+}
+.bouton-fermer-pilulier {
+    background-color: #e57373;
+    color: white;
+}
+.bouton-fermer-pilulier:hover:not([disabled]) {
+    background-color: #ef5350;
+}
+
+/* Titre "Mes Prescriptions" */
+.titre-section-prescriptions {
+    font-size: 20px;
+    color: var(--couleur-primaire);
+    margin: 0 0 10px 0;
+    border-bottom: 2px solid var(--couleur-secondaire);
+    padding-bottom: 8px;
+}
+
+/* Disposition horizontale Matin/Midi/Soir */
+.cartes-prescriptions-horizontales {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.cartes-prescriptions-horizontales .carte-prescription {
+    flex: 1 1 calc(33.333% - 20px);
+    box-sizing: border-box;
+}
+
+/* Carte-prescription : conteneur d'une prescription */
+.carte-prescription {
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: var(--ombre-legere);
+}
+
+.en_tete-prescription {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.titre-prescription {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--couleur-primaire);
+}
+
+.details-prescription {
+    margin: 10px 0;
+}
+
+.ligne-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+/* Timer stylé (compte à rebours) */
+.compte-a-rebours {
+    font-weight: 600;
+    color: var(--couleur-primaire);
+    margin-left: 10px;
+}
+
+/* Bouton "Prendre maintenant" */
+.ligne-bouton {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+.bouton-prendre-maintenant {
+    background-color: #26a69a;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(38, 166, 154, 0.3);
+    transition: all 0.2s ease;
+}
+.bouton-prendre-maintenant:hover {
+    background-color: #00897b;
+    box-shadow: 0 4px 8px rgba(38, 166, 154, 0.4);
+}
+
+/* Mini-cartes de prescription */
+.mini-prescription-card {
+    background-color: var(--couleur-secondaire);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: var(--ombre-legere);
+}
+.mini-prescription-card + .mini-prescription-card {
+    margin-top: 10px;
+}
+
+/* En-tête : titre (médicament) à gauche et bouton à droite */
+.mini-prescription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.mini-prescription-header h4 {
+    margin: 0;
+}
+.mini-prescription-header .bouton-prendre-maintenant {
+    margin-left: auto;
+}
+
+/* =================================================================================
+   PARTIE MEDECIN : CARTES PATIENT ET MÉDICAMENTS AMÉLIORÉES
+   ================================================================================= */
+
+/* Carte-patient : bloc regroupant les prescriptions d'un patient */
+.carte-patient {
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: var(--ombre-legere);
+    overflow: hidden;
+}
+
+/* En-tête cliquable pour dérouler les prescriptions */
+.en_tete-patient {
+    background-color: var(--couleur-secondaire);
+    padding: 12px 16px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--couleur-texte);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.contenu-patient-prescriptions {
+    padding: 10px 16px;
+    border-top: 1px solid var(--couleur-bordure);
+}
+.contenu-patient-prescriptions.masque {
+    display: none;
+}
+
+.item-prescription {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+.item-prescription .desactiver {
+    background-color: #ff8a65;
+    color: #fff;
+    margin-left: 15px;
+    border-radius: 4px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+.item-prescription .desactiver:hover {
+    background-color: #ff7043;
+}
+.badge-inactif {
+    margin-left: 10px;
+    color: var(--couleur-erreur);
+    font-weight: 500;
+}
+
+/* Cartes médicaments améliorées (vue médecin) */
+.carte-medicament-amelioree {
+    background-color: var(--couleur-secondaire);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--ombre-legere);
+}
+.carte-medicament-amelioree h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--couleur-primaire);
+}
+.carte-medicament-amelioree .dosage-medicament {
+    margin: 0;
+    color: var(--couleur-texte);
+    opacity: 0.9;
+}
+
+/* =================================================================================
+   PARTIE MESSAGERIE
+   =================================================================================
+   Liste de messages, conversation, etc.
+*/
+.liste-messages {
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* Contact-message : un utilisateur dans la liste (clic => convo) */
+.contact-message {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--couleur-bordure);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+.contact-message:hover {
+    background-color: var(--couleur-secondaire);
+}
+.nom-contact-message {
+    font-weight: 500;
+    color: var(--couleur-texte);
+}
+
+/* Panneau de conversation côté médecin */
+#conversation-medecin {
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 8px;
+    overflow: hidden;
+    height: 500px;
+    flex-direction: column;
+    display: none;
+}
+#conversation-medecin.active {
+    display: flex;
+}
+
+/* En-tête de la conversation */
+.en_tete-conversation {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--couleur-bordure);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.en_tete-conversation h3 {
+    font-weight: 500;
+}
+
+/* Conteneur de bulles de messages */
+#conteneur-messages-medecin {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+/* Bulle envoyée ou reçue */
+.bulle-message {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    position: relative;
+}
+.bulle-message.envoye {
+    background-color: var(--couleur-primaire);
+    color: var(--couleur-texte-clair);
+    margin-left: auto;
+}
+.bulle-message.recu {
+    background-color: var(--couleur-secondaire);
+    color: var(--couleur-texte);
+}
+
+/* Petit horodatage dans le coin bas-droit */
+.horodatage-message {
+    font-size: 12px;
+    position: absolute;
+    bottom: -16px;
+    right: 8px;
+    opacity: 0.7;
+}
+
+/* Zone de saisie du message */
+.zone-saisie-message {
+    display: flex;
+    padding: 12px;
+    border-top: 1px solid var(--couleur-bordure);
+}
+.zone-saisie-message textarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 4px;
+    resize: none;
+    height: 60px;
+    margin-right: 10px;
+}
+.zone-saisie-message textarea:focus {
+    outline: none;
+    border-color: var(--couleur-primaire);
+}

@@ -1,0 +1,51 @@
+# =========================================
+# Fichier : .gitignore
+# -----------------------------------------
+# Ignorer tout ce qui n'est pas utile au projet
+# (fichiers temporaires, caches, binaires, etc.)
+# =========================================
+
+# --- Dossiers et fichiers Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+*.pyo
+*.pyd
+
+# --- Environnements virtuels ---
+venv/
+.env/
+.venv/
+
+# --- Fichiers journaux ou logs ---
+*.log
+
+# --- Base de données SQLite (si vous ne voulez pas la versionner) ---
+# (Décommentez si vous ne souhaitez pas versionner votre BDD)
+# backend/bdd/pilulier.db
+
+# --- Fichiers/rapports de test ---
+htmlcov/
+.coverage
+.cache
+
+# --- Windows ---
+Thumbs.db
+Desktop.ini
+*.Zone.Identifier
+
+# --- Arduino build ---
+*.ino.upload.*
+*.bin
+*.elf
+*.hex
+*.map
+*.out
+
+# --- Mac OS ---
+.DS_Store
+
+# --- Divers ---
+.idea/
+.vscode/

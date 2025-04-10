@@ -1,0 +1,72 @@
+/* ============================================================================================================
+   Fichier : fenetres_modales.css
+   ------------------------------------------------------------------------------------------------------------
+   Contient les styles relatifs aux fenêtres modales (overlays) et les animations associées (apparaitreModale).
+   ============================================================================================================
+*/
+
+/* Représente la superposition (overlay) recouvrant tout l'écran. Elle est centrée (flex) lorsqu'active.*/
+.fenetre-modale {
+    display: none;
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Lorsque la classe .active est présente, on affiche la modal en mode flex (le fond obscurci et la boîte au centre).*/
+.fenetre-modale.active {
+    display: flex;
+}
+
+/* 
+   Boîte principale de la fenêtre modale :
+    - largeur max 500px
+    - fond (var(--couleur-carte))
+    - arrondie (border-radius)
+    - animation légère d'apparition
+*/
+.contenu-modale {
+    background-color: var(--couleur-carte);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    animation: apparaitreModale 0.3s;
+}
+
+/* En-tête de la modale, qui comprend généralement un titre et un bouton de fermeture.*/
+.entete-modale {
+    padding: 16px;
+    border-bottom: 1px solid var(--couleur-bordure);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Titre de la fenêtre modale*/
+.entete-modale h2 {
+    color: var(--couleur-primaire);
+    font-size: 20px;
+}
+
+/* Corps de la fenêtre modale où se place le contenu principal (formulaire, texte, etc.).*/
+.corps-modale {
+    padding: 16px;
+}
+
+/* Animation keyframes pour l'effet d'apparition (opacité + translation verticale).*/
+@keyframes apparaitreModale {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -20px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}

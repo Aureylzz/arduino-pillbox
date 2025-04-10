@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Système de Pilulier Intelligent</title>
+
+  <!--
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  INCLUSION DES STYLES CSS
+    - (séparés en plusieurs fichiers : base, composants, mise_en_page, fenetres_modales, adaptatif)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/composants.css">
+  <link rel="stylesheet" href="css/mise_en_page.css">
+  <link rel="stylesheet" href="css/fenetres_modales.css">
+  <link rel="stylesheet" href="css/adaptatif.css">
+
+  <!-- Eventuel CDN d'icônes (FontAwesome, etc.) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="conteneur-principal">
+
+    <!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ÉCRAN DE CONNEXION (Patient/Médecin)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    -->
+    <div id="ecran-connexion" class="ecran">
+      <h1>Système de Pilulier Intelligent</h1>
+      <div class="formulaire-connexion">
+        <!-- Bascule pour choisir Patient ou Médecin -->
+        <div class="zone-bascule">
+          <button id="bascule-patient" class="bouton-bascule actif">Patient</button>
+          <button id="bascule-medecin" class="bouton-bascule">Médecin</button>
+        </div>
+
+        <!-- Champs de connexion -->
+        <div class="groupe-champ">
+          <label for="champ-nom-utilisateur">Nom d'utilisateur</label>
+          <input type="text" id="champ-nom-utilisateur" name="nom-utilisateur">
+        </div>
+
+        <div class="groupe-champ">
+          <label for="champ-mot-de-passe">Mot de passe</label>
+          <input type="password" id="champ-mot-de-passe" name="mot-de-passe">
+        </div>
+
+        <button id="bouton-connexion" class="bouton-principal">Se connecter</button>
+
+        <!-- Message d'erreur éventuel -->
+        <div id="erreur-connexion" class="message-erreur"></div>
+      </div>
+    </div>
+    <!-- Fin écran de connexion -->
+
+    <!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    TABLEAU DE BORD PATIENT
+      - Gère médicaments, messagerie, etc.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    -->
+    <div id="tableau-bord-patient" class="ecran masque">
+      <header class="en_tete">
+        <h1>Tableau de bord du Patient</h1>
+        <div class="info-utilisateur">
+          <!-- Affichage du nom du patient -->
+          <span id="nom-patient"></span>
+          <!-- Bouton de déconnexion -->
+          <button id="deconnexion-patient" class="bouton-deconnexion">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="conteneur-onglets">
+        <div class="zone-onglets">
+          <button id="onglet-medicaments" class="onglet-bouton actif">Médicaments</button>
+          <button id="onglet-messages" class="onglet-bouton">Messages</button>
+        </div>
+
+        <!-- Panneau Médicaments (liste des prescriptions, contrôle pilulier) -->
+        <div id="panneau-medicaments" class="panneau-onglet actif">
+          <div class="liste-prescriptions" id="liste-prescriptions-patient">
+            <!-- Cartes (Matin, Midi, Soir) + Contrôle du Pilulier + Countdowns s'affichent ici -->
+          </div>
+        </div>
+
+        <!-- Panneau Messages (patient) -->
+        <div id="panneau-messages" class="panneau-onglet">
+          <h2>Messages</h2>
+          <div class="liste-messages" id="liste-messages-patient">
+            <!-- Les contacts de message (médecins) apparaîtront ici -->
+          </div>
+          <div class="conversation" id="conversation-patient">
+            <div class="en_tete-conversation">
+              <!-- Bouton retour à la liste des contacts -->
+              <button id="retour-liste-messages" class="bouton-retour">
+                <i class="fas fa-arrow-left"></i>
+              </button>
+              <h3 id="destinataire-conversation"></h3>
+            </div>
+            <div class="conteneur-messages" id="conteneur-messages">
+              <!-- Les bulles de messages apparaîtront ici -->
+            </div>
+            <div class="zone-saisie-message">
+              <textarea id="champ-message" placeholder="Écrivez votre message ici..."></textarea>
+              <button id="bouton-envoyer-message" class="bouton-envoyer">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Tableau de bord Patient -->
+
+    <!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    TABLEAU DE BORD MÉDECIN
+      - Onglets : Prescriptions, Médicaments, Messages
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    -->
+    <div id="tableau-bord-medecin" class="ecran masque">
+      <header class="en_tete">
+        <h1>Tableau de bord du Médecin</h1>
+        <div class="info-utilisateur">
+          <!-- Affichage nom du médecin -->
+          <span id="nom-medecin"></span>
+          <!-- Bouton de déconnexion -->
+          <button id="deconnexion-medecin" class="bouton-deconnexion">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="conteneur-onglets">
+        <div class="zone-onglets">
+          <button id="onglet-prescriptions" class="onglet-bouton actif">Prescriptions</button>
+          <button id="onglet-medicaments-medecin" class="onglet-bouton">Médicaments</button>
+          <button id="onglet-messages-medecin" class="onglet-bouton">Messages</button>
+        </div>
+
+        <!-- Panneau Prescriptions (médecin) -->
+        <div id="panneau-prescriptions" class="panneau-onglet actif">
+          <div class="actions-panneau">
+            <h2>Prescriptions</h2>
+            <!-- Bouton pour ajouter une nouvelle prescription -->
+            <button id="ajout-prescription" class="bouton-action">
+              <i class="fas fa-plus"></i> Nouvelle Prescription
+            </button>
+          </div>
+          <div class="liste-prescriptions" id="liste-prescriptions-medecin">
+            <!-- Cartes de prescription médecin (groupées par patient) -->
+          </div>
+        </div>
+
+        <!-- Panneau Médicaments (médecin) -->
+        <div id="panneau-medicaments-medecin" class="panneau-onglet">
+          <div class="actions-panneau">
+            <h2>Médicaments</h2>
+            <!-- Bouton pour ajouter un médicament -->
+            <button id="ajout-medicament" class="bouton-action">
+              <i class="fas fa-plus"></i> Nouveau Médicament
+            </button>
+          </div>
+          <div class="liste-medicaments" id="liste-medicaments">
+            <!-- Les cartes de médicament (améliorées) apparaîtront ici -->
+          </div>
+        </div>
+
+        <!-- Panneau Messages (médecin) -->
+        <div id="panneau-messages-medecin" class="panneau-onglet">
+          <h2>Messages</h2>
+          <div class="liste-messages" id="liste-messages-medecin">
+            <!-- Les contacts (patients) apparaîtront ici -->
+          </div>
+          <div class="conversation" id="conversation-medecin">
+            <div class="en_tete-conversation">
+              <!-- Bouton retour à la liste des contacts -->
+              <button id="retour-liste-messages-medecin" class="bouton-retour">
+                <i class="fas fa-arrow-left"></i>
+              </button>
+              <h3 id="destinataire-conversation-medecin"></h3>
+            </div>
+            <div class="conteneur-messages" id="conteneur-messages-medecin">
+              <!-- Bulles de messages médecin -->
+            </div>
+            <div class="zone-saisie-message">
+              <textarea id="champ-message-medecin" placeholder="Écrivez votre message ici..."></textarea>
+              <button id="bouton-envoyer-message-medecin" class="bouton-envoyer">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Tableau de bord Médecin -->
+
+    <!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    FENÊTRES MODALES (pour le Médecin)
+      - Nouveau Médicament
+      - Nouvelle Prescription
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    -->
+
+    <!-- Fenêtre Nouveau Médicament -->
+    <div id="fenetre-modale-medicament" class="fenetre-modale">
+      <div class="contenu-modale">
+        <div class="entete-modale">
+          <h2>Ajouter un Médicament</h2>
+          <button id="fermer-fenetre-medicament" class="bouton-fermer">&times;</button>
+        </div>
+        <div class="corps-modale">
+          <div class="groupe-champ">
+            <label for="nom-medicament">Nom du Médicament</label>
+            <input type="text" id="nom-medicament" name="nom-medicament">
+          </div>
+          <div class="groupe-champ">
+            <label for="dosage-medicament">Dosage</label>
+            <input type="text" id="dosage-medicament" name="dosage-medicament">
+          </div>
+          <button id="sauver-medicament" class="bouton-principal">
+            Sauvegarder
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fenêtre Nouvelle Prescription -->
+    <div id="fenetre-modale-prescription" class="fenetre-modale">
+      <div class="contenu-modale">
+        <div class="entete-modale">
+          <h2>Ajouter une Prescription</h2>
+          <button id="fermer-fenetre-prescription" class="bouton-fermer">&times;</button>
+        </div>
+        <div class="corps-modale">
+          <div class="groupe-champ">
+            <label for="prescription-patient">Patient</label>
+            <select id="prescription-patient" name="prescription-patient">
+              <!-- Options générées dynamiquement -->
+            </select>
+          </div>
+          <div class="groupe-champ">
+            <label for="prescription-medicament">Médicament</label>
+            <select id="prescription-medicament" name="prescription-medicament">
+              <!-- Options générées dynamiquement -->
+            </select>
+          </div>
+          <div class="groupe-champ">
+            <label for="prescription-moteur">Compartiment du Pilulier</label>
+            <select id="prescription-moteur" name="prescription-moteur">
+              <option value="1">Compartiment 1</option>
+              <option value="2">Compartiment 2</option>
+              <option value="3">Compartiment 3</option>
+            </select>
+          </div>
+          <div class="groupe-champ">
+            <label for="prescription-heure">Heure de Prise</label>
+            <input type="time" id="prescription-heure" name="prescription-heure">
+          </div>
+          <button id="sauver-prescription" class="bouton-principal">
+            Sauvegarder
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Fenêtres modales -->
+
+  </div><!-- Fin .conteneur-principal -->
+
+  <!--
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  INCLUSION DES SCRIPTS JS (API, Auth, etc.)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  -->
+  <script src="js/api_client.js"></script>
+  <script src="js/authentification.js"></script>
+  <script src="js/gestionnaire_patient.js"></script>
+  <script src="js/gestionnaire_medecin.js"></script>
+  <script src="js/application_principale.js"></script>
+</body>
+
+</html>

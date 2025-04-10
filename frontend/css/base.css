@@ -1,0 +1,75 @@
+/* ====================================================================================================
+   Fichier : base.css
+   ----------------------------------------------------------------------------------------------------
+   Contient les variables CSS (thème), un reset de base, et des règles globales pour toute l'interface.
+   ====================================================================================================
+*/
+
+/* -----------------------------
+   Variables CSS (thème)
+   -----------------------------
+   :root { --variable: valeur; } permettent de définir un thème (couleurs, ombres, etc.) réutilisable dans tout le CSS via var(--variable).
+*/
+:root {
+    /* Couleurs principales */
+    --couleur-primaire: #4a69bd;
+    --couleur-primaire-sombre: #3c55a5;
+
+    /* Couleurs secondaires et accent */
+    --couleur-secondaire: #ced6e0;
+    --couleur-accent: #ff6b6b;
+    --couleur-accent-sombre: #ee5253;
+
+    /* Couleurs de texte et de fond */
+    --couleur-texte: #2c3e50;
+    --couleur-texte-clair: #f5f6fa;
+    --couleur-fond: #f1f2f6;
+    --couleur-carte: #ffffff;
+    --couleur-bordure: #dfe4ea;
+
+    /* Couleurs de retours visuels */
+    --couleur-succes: #1dd1a1;
+    --couleur-avertissement: #feca57;
+    --couleur-erreur: #ff6b6b;
+
+    /* Ombres / effets */
+    --ombre-legere: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* -----------------------------
+   Reset & règles globales
+   -----------------------------
+   On retire les marges et paddings par défaut et on définit la police d'écriture globale.
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    line-height: 1.6;
+}
+
+/* 
+   Conteneur principal (layout):
+   - largeur max à 1200px,
+   - centrage horizontal (margin auto),
+   - padding de 20px pour respirer.
+*/
+.conteneur-principal {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 
+   Classe utilitaire pour masquer un élément (ex: quand on veut un écran ou panneau caché).
+*/
+.masque {
+    display: none !important;
+}

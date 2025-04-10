@@ -1,0 +1,335 @@
+/* ======================================================================
+   Fichier : composants.css
+   ----------------------------------------------------------------------
+   Contient les styles pour les composants réutilisables de l'interface : 
+    - boutons
+    - formulaires
+    - cartes de prescriptions
+    - messages, etc.
+   ======================================================================
+*/
+
+/* -----------------------------
+   Boutons
+   -----------------------------
+   Règles générales pour <button> et boutons spécifiques (bouton-principal, bouton-action, etc.).
+*/
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Bouton principal, généralement large (width:100%).*/
+.bouton-principal {
+    background-color: var(--couleur-primaire);
+    color: var(--couleur-texte-clair);
+    padding: 10px 20px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.bouton-principal:hover {
+    background-color: var(--couleur-primaire-sombre);
+}
+
+/* Bouton d'action (ex: + Nouveau Médicament), avec icône et texte.*/
+.bouton-action {
+    background-color: var(--couleur-primaire);
+    color: var(--couleur-texte-clair);
+    padding: 8px 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bouton-action:hover {
+    background-color: var(--couleur-primaire-sombre);
+}
+
+/* Bouton de bascule (Patient / Médecin) dans la page de connexion.*/
+.bouton-bascule {
+    flex: 1;
+    padding: 10px;
+    background-color: transparent;
+    color: var(--couleur-texte);
+    text-align: center;
+    font-weight: 500;
+    border-radius: 0;
+}
+
+.bouton-bascule.actif {
+    background-color: var(--couleur-primaire);
+    color: var(--couleur-texte-clair);
+}
+
+/* Boutons de déconnexion ou de retour, ronds avec icône (souvent <i>).*/
+.bouton-deconnexion,
+.bouton-retour {
+    background-color: transparent;
+    color: var(--couleur-texte);
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.bouton-deconnexion:hover,
+.bouton-retour:hover {
+    background-color: var(--couleur-secondaire);
+}
+
+/* Bouton pour envoyer un message (icône papier-avion par ex.) */
+.bouton-envoyer {
+    background-color: var(--couleur-primaire);
+    color: var(--couleur-texte-clair);
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.bouton-envoyer:hover {
+    background-color: var(--couleur-primaire-sombre);
+}
+
+/* Bouton pour fermer une fenêtre modale (souvent un 'X' sur fond transparent).*/
+.bouton-fermer {
+    background-color: transparent;
+    color: var(--couleur-texte);
+    font-size: 22px;
+    padding: 0;
+}
+
+/* Désactive l'interaction et réduit l'opacité.*/
+button.desactive {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* -----------------------------
+   Formulaires
+   -----------------------------
+   Champs, labels, messages d'erreur, etc.
+*/
+.groupe-champ {
+    margin-bottom: 20px;
+}
+
+.groupe-champ label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.groupe-champ input,
+.groupe-champ select,
+.groupe-champ textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.groupe-champ input:focus,
+.groupe-champ select:focus,
+.groupe-champ textarea:focus {
+    outline: none;
+    border-color: var(--couleur-primaire);
+}
+
+/* Message d'erreur affiché sous le champ */
+.message-erreur {
+    color: var(--couleur-erreur);
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* -----------------------------
+   Messages informatifs
+   -----------------------------
+   Zone de texte pour informer l'utilisateur (ex: notice).
+*/
+.message-info {
+    background-color: #f0f8ff;
+    border-left: 4px solid var(--couleur-primaire);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    box-shadow: var(--ombre-legere);
+}
+
+.message-info p {
+    margin: 0;
+    color: var(--couleur-texte);
+}
+
+/* -----------------------------
+   Cartes et agencement vertical
+   -----------------------------
+   Gère l'affichage des prescriptions, notamment la .liste-prescriptions.
+*/
+.liste-prescriptions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.liste-prescriptions > * {
+    width: 100%;
+}
+
+/* Carte d'une prescription (ombrée et qui se soulève au survol).*/
+.carte-prescription {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--ombre-legere);
+    transition: transform 0.2s ease;
+}
+
+.carte-prescription:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre de la section "Mes Prescriptions".*/
+.titre-section-prescriptions {
+    font-size: 20px;
+    color: var(--couleur-primaire);
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--couleur-secondaire);
+}
+
+/* Carte principale de contrôle du pilulier (fond bleuté, bordure, etc.)*/
+.carte-principale-controle {
+    background-color: #e8f4fc;
+    border: 1px solid #c5e1f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: var(--ombre-legere);
+    width: 100%;
+}
+
+/* En-tête d'une carte (souvent titre + statut).*/
+.en_tete-prescription {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(25, 118, 210, 0.2);
+    padding-bottom: 10px;
+}
+
+/* Titre dans l'en-tête.*/
+.titre-prescription {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1976d2;
+}
+
+/* Petit badge indiquant le statut du pilulier.*/
+.statut-pilulier {
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Contrôles dans la carte principale (commandes manuelles pour ouvrir/fermer).*/
+.controles-pilulier {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.controles-pilulier h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #1976d2;
+    border-bottom: 1px dashed rgba(25, 118, 210, 0.3);
+    padding-bottom: 8px;
+}
+
+/* Section d'actions (boutons).*/
+.actions-prescription {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.actions-prescription button {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+
+/* Bouton "Ouvrir" en bleu.*/
+.bouton-ouvrir {
+    background-color: #1976d2;
+    color: white;
+}
+.bouton-ouvrir:hover:not([disabled]) {
+    background-color: #1565c0;
+}
+
+/* Bouton "Fermer" en rouge clair.*/
+.bouton-fermer-pilulier {
+    background-color: #e57373;
+    color: white;
+}
+.bouton-fermer-pilulier:hover:not([disabled]) {
+    background-color: #ef5350;
+}
+
+/* Bouton pour "Prendre maintenant" sur la carte prescription.*/
+.bouton-prendre-maintenant {
+    background-color: #26a69a;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(38, 166, 154, 0.3);
+    transition: all 0.2s ease;
+}
+
+.bouton-prendre-maintenant:hover {
+    background-color: #00897b;
+    box-shadow: 0 4px 8px rgba(38, 166, 154, 0.4);
+}
+
+/* Ligne contenant le bouton, avec un léger séparateur (dashed) en haut.*/
+.ligne-bouton {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--couleur-bordure);
+}
+
+/* Ajustements responsive : quand la largeur <= 900px, on réduit la disposition horizontale.*/
+@media (max-width: 900px) {
+    .actions-prescription {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .liste-prescriptions {
+        gap: 16px;
+    }
+
+    .carte-principale-controle,
+    .carte-prescription {
+        width: 100%;
+    }
+}

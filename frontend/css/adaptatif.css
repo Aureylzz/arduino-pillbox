@@ -1,0 +1,39 @@
+/* ======================================================================================
+   Fichier : adaptatif.css
+   --------------------------------------------------------------------------------------
+   Contient les media queries pour gérer l'adaptation (responsive design) de l'interface.
+   Par exemple, on ajuste la disposition si la largeur d'écran est inférieure à 768px.
+   ======================================================================================
+*/
+
+/* -----------------------------
+   Règles pour écrans <= 768px
+   -----------------------------
+   On réduit le nombre de colonnes et on adapte la taille des boutons/carte.
+*/
+@media (max-width: 768px) {
+    /* 
+     Liste prescriptions/médicaments : passer à une colonne unique (1fr) au lieu de grilles multiples si c'était défini ailleurs
+     (ex. grid-template-columns: 2fr 2fr).
+    */
+    .liste-prescriptions,
+    .liste-medicaments {
+        grid-template-columns: 1fr;
+    }
+
+    /*
+     Réduire un peu la taille des boutons d'onglets pour qu'ils s'affichent mieux sur des écrans plus petits (téléphones/tablettes).
+    */
+    .onglet-bouton {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    /*
+     Pour les cartes (ex. prescriptions ou médicaments), on diminue la marge inférieure pour gagner de l'espace vertical.
+    */
+    .carte-prescription,
+    .carte-medicament {
+        margin-bottom: 16px;
+    }
+}
