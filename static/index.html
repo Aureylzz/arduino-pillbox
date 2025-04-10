@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de Pilulier Intelligent</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen">
+            <h1>Système de Pilulier Intelligent</h1>
+            <div class="login-form">
+                <div class="toggle-container">
+                    <button id="patient-toggle" class="toggle-button active">Patient</button>
+                    <button id="doctor-toggle" class="toggle-button">Médecin</button>
+                </div>
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <button id="login-button" class="primary-button">Se connecter</button>
+                <div id="login-error" class="error-message"></div>
+            </div>
+        </div>
+
+        <!-- Patient Dashboard -->
+        <div id="patient-dashboard" class="screen hidden">
+            <header>
+                <h1>Tableau de bord du Patient</h1>
+                <div class="user-info">
+                    <span id="patient-name"></span>
+                    <button id="patient-logout" class="logout-button"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+            
+            <div class="tab-container">
+                <div class="tabs">
+                    <button id="medications-tab" class="tab-button active">Médicaments</button>
+                    <button id="messages-tab" class="tab-button">Messages</button>
+                </div>
+                
+                <div id="medications-panel" class="tab-panel active">
+                    <h2>Mes Médicaments</h2>
+                    <div class="prescription-list" id="patient-prescription-list">
+                        <!-- Prescription items will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div id="messages-panel" class="tab-panel">
+                    <h2>Messages</h2>
+                    <div class="message-list" id="patient-message-list">
+                        <!-- Message contacts will be added here dynamically -->
+                    </div>
+                    <div class="conversation" id="patient-conversation">
+                        <div class="conversation-header">
+                            <button id="back-to-message-list" class="back-button"><i class="fas fa-arrow-left"></i></button>
+                            <h3 id="conversation-recipient"></h3>
+                        </div>
+                        <div class="message-container" id="message-container">
+                            <!-- Messages will be added here dynamically -->
+                        </div>
+                        <div class="message-input">
+                            <textarea id="message-input" placeholder="Écrivez votre message ici..."></textarea>
+                            <button id="send-message" class="send-button"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doctor Dashboard -->
+        <div id="doctor-dashboard" class="screen hidden">
+            <header>
+                <h1>Tableau de bord du Médecin</h1>
+                <div class="user-info">
+                    <span id="doctor-name"></span>
+                    <button id="doctor-logout" class="logout-button"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+            
+            <div class="tab-container">
+                <div class="tabs">
+                    <button id="prescriptions-tab" class="tab-button active">Prescriptions</button>
+                    <button id="doc-medications-tab" class="tab-button">Médicaments</button>
+                    <button id="doc-messages-tab" class="tab-button">Messages</button>
+                </div>
+                
+                <div id="prescriptions-panel" class="tab-panel active">
+                    <div class="panel-actions">
+                        <h2>Prescriptions</h2>
+                        <button id="add-prescription" class="action-button"><i class="fas fa-plus"></i> Nouvelle Prescription</button>
+                    </div>
+                    <div class="prescription-list" id="doctor-prescription-list">
+                        <!-- Prescription items will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div id="doc-medications-panel" class="tab-panel">
+                    <div class="panel-actions">
+                        <h2>Médicaments</h2>
+                        <button id="add-medication" class="action-button"><i class="fas fa-plus"></i> Nouveau Médicament</button>
+                    </div>
+                    <div class="medication-list" id="medication-list">
+                        <!-- Medication items will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div id="doc-messages-panel" class="tab-panel">
+                    <h2>Messages</h2>
+                    <div class="message-list" id="doctor-message-list">
+                        <!-- Message contacts will be added here dynamically -->
+                    </div>
+                    <div class="conversation" id="doctor-conversation">
+                        <div class="conversation-header">
+                            <button id="back-to-doctor-message-list" class="back-button"><i class="fas fa-arrow-left"></i></button>
+                            <h3 id="doctor-conversation-recipient"></h3>
+                        </div>
+                        <div class="message-container" id="doctor-message-container">
+                            <!-- Messages will be added here dynamically -->
+                        </div>
+                        <div class="message-input">
+                            <textarea id="doctor-message-input" placeholder="Écrivez votre message ici..."></textarea>
+                            <button id="doctor-send-message" class="send-button"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <!-- New Medication Modal -->
+        <div id="medication-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Ajouter un Médicament</h2>
+                    <button id="close-medication-modal" class="close-button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="medication-name">Nom du Médicament</label>
+                        <input type="text" id="medication-name" name="medication-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="medication-dosage">Dosage</label>
+                        <input type="text" id="medication-dosage" name="medication-dosage">
+                    </div>
+                    <button id="save-medication" class="primary-button">Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Prescription Modal -->
+        <div id="prescription-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Ajouter une Prescription</h2>
+                    <button id="close-prescription-modal" class="close-button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="prescription-patient">Patient</label>
+                        <select id="prescription-patient" name="prescription-patient">
+                            <!-- Patients will be added here dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prescription-medication">Médicament</label>
+                        <select id="prescription-medication" name="prescription-medication">
+                            <!-- Medications will be added here dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prescription-motor">Compartiment du Pilulier</label>
+                        <select id="prescription-motor" name="prescription-motor">
+                            <option value="1">Compartiment 1</option>
+                            <option value="2">Compartiment 2</option>
+                            <option value="3">Compartiment 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prescription-time">Heure de Prise</label>
+                        <input type="time" id="prescription-time" name="prescription-time">
+                    </div>
+                    <button id="save-prescription" class="primary-button">Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/patient.js"></script>
+    <script src="js/doctor.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
