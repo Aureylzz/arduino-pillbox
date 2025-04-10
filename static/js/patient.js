@@ -1,19 +1,21 @@
 /**
- * Patient Dashboard Manager
- * Handles patient-specific functionality
+ * Gestionnaire du tableau de bord patient
+ * Gère les fonctionnalités spécifiques aux patients
  */
 class PatientManager {
     constructor() {
-        // DOM Elements - Tabs
+        console.log("Initialisation du gestionnaire patient");
+        
+        // Éléments DOM - Onglets
         this.medicationsTab = document.getElementById('medications-tab');
         this.messagesTab = document.getElementById('messages-tab');
         this.medicationsPanel = document.getElementById('medications-panel');
         this.messagesPanel = document.getElementById('messages-panel');
         
-        // DOM Elements - Prescriptions
+        // Éléments DOM - Prescriptions
         this.prescriptionList = document.getElementById('patient-prescription-list');
         
-        // DOM Elements - Messages
+        // Éléments DOM - Messages
         this.messageList = document.getElementById('patient-message-list');
         this.conversation = document.getElementById('patient-conversation');
         this.conversationRecipient = document.getElementById('conversation-recipient');
@@ -22,82 +24,143 @@ class PatientManager {
         this.sendMessageButton = document.getElementById('send-message');
         this.backToMessageList = document.getElementById('back-to-message-list');
         
-        // State
+        // État
         this.prescriptions = [];
         this.doctors = [];
         this.currentConversationUserId = null;
         
-        // Bind events
+        // Vérifie si tous les éléments DOM sont présents
+        console.log("Éléments du tableau de bord patient:", {
+            medicationsTab: this.medicationsTab,
+            messagesTab: this.messagesTab,
+            medicationsPanel: this.medicationsPanel,
+            messagesPanel: this.messagesPanel,
+            prescriptionList: this.prescriptionList,
+            messageList: this.messageList,
+            conversation: this.conversation,
+            messageInput: this.messageInput
+        });
+        
+        // Associer les gestionnaires d'événements
         this.bindEvents();
     }
     
     /**
-     * Bind event handlers to DOM elements
+     * Associer les gestionnaires d'événements aux éléments DOM
      */
     bindEvents() {
-        // Tab navigation
-        this.medicationsTab.addEventListener('click', () => this.switchTab('medications'));
-        this.messagesTab.addEventListener('click', () => this.switchTab('messages'));
+        console.log("Attachement des événements du tableau de bord patient");
         
-        // Message handling
-        this.sendMessageButton.addEventListener('click', () => this.sendMessage());
-        this.backToMessageList.addEventListener('click', () => this.showMessageList());
+        // Navigation par onglets
+        if (this.medicationsTab) {
+            this.medicationsTab.addEventListener('click', () => {
+                console.log("Onglet Médicaments cliqué");
+                this.switchTab('medications');
+            });
+        }
         
-        // Message input - send on Enter, new line on Shift+Enter
-        this.messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
+        if (this.messagesTab) {
+            this.messagesTab.addEventListener('click', () => {
+                console.log("Onglet Messages cliqué");
+                this.switchTab('messages');
+            });
+        }
+        
+        // Gestion des messages
+        if (this.sendMessageButton) {
+            this.sendMessageButton.addEventListener('click', () => {
+                console.log("Bouton d'envoi de message cliqué");
                 this.sendMessage();
-            }
-        });
+            });
+        }
+        
+        if (this.backToMessageList) {
+            this.backToMessageList.addEventListener('click', () => {
+                console.log("Retour à la liste des messages");
+                this.showMessageList();
+            });
+        }
+        
+        // Champ de saisie de message - envoyer avec Entrée, nouvelle ligne avec Maj+Entrée
+        if (this.messageInput) {
+            this.messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.sendMessage();
+                }
+            });
+        }
     }
     
     /**
-     * Switch between tabs
-     * @param {string} tab - Tab name to switch to
+     * Basculer entre les onglets
+     * @param {string} tab - Nom de l'onglet à afficher
      */
     switchTab(tab) {
-        // Update tab buttons
-        this.medicationsTab.classList.toggle('active', tab === 'medications');
-        this.messagesTab.classList.toggle('active', tab === 'messages');
+        console.log(`Basculement vers l'onglet: ${tab}`);
         
-        // Update tab panels
-        this.medicationsPanel.classList.toggle('active', tab === 'medications');
-        this.messagesPanel.classList.toggle('active', tab === 'messages');
+        // Mettre à jour les boutons d'onglet
+        if (this.medicationsTab && this.messagesTab) {
+            this.medicationsTab.classList.toggle('active', tab === 'medications');
+            this.messagesTab.classList.toggle('active', tab === 'messages');
+        }
         
-        // Load data if switching to messages tab
+        // Mettre à jour les panneaux d'onglet
+        if (this.medicationsPanel && this.messagesPanel) {
+            this.medicationsPanel.classList.toggle('active', tab === 'medications');
+            this.messagesPanel.classList.toggle('active', tab === 'messages');
+            
+            // Supprimer la classe hidden pour compatibilité avec les anciens styles
+            this.medicationsPanel.classList.toggle('hidden', tab !== 'medications');
+            this.messagesPanel.classList.toggle('hidden', tab !== 'messages');
+        }
+        
+        // Charger les données si passage à l'onglet messages
         if (tab === 'messages') {
             this.loadDoctors();
         }
     }
     
     /**
-     * Load all data for the patient dashboard
+     * Charger toutes les données pour le tableau de bord patient
      */
     async loadData() {
+        console.log("Chargement des données du patient");
         await this.loadPrescriptions();
     }
     
     /**
-     * Load prescriptions for the current patient
+     * Charger les prescriptions pour le patient actuel
      */
     async loadPrescriptions() {
+        console.log("Chargement des prescriptions");
+        
         try {
             const response = await ApiService.getPrescriptions();
             
             if (response.success) {
+                console.log("Prescriptions chargées:", response.prescriptions);
                 this.prescriptions = response.prescriptions;
                 this.renderPrescriptions();
+            } else {
+                console.log("Échec du chargement des prescriptions:", response.message);
             }
         } catch (error) {
-            console.error('Error loading prescriptions:', error);
+            console.error('Erreur de chargement des prescriptions:', error);
         }
     }
     
     /**
-     * Render prescriptions in the UI
+     * Afficher les prescriptions dans l'interface utilisateur
      */
     renderPrescriptions() {
+        console.log("Affichage des prescriptions");
+        
+        if (!this.prescriptionList) {
+            console.error("Élément prescriptionList introuvable");
+            return;
+        }
+        
         this.prescriptionList.innerHTML = '';
         
         if (this.prescriptions.length === 0) {
@@ -105,7 +168,7 @@ class PatientManager {
             return;
         }
         
-        // Group prescriptions by motor number
+        // Regrouper les prescriptions par numéro de moteur
         const motorGroups = {};
         this.prescriptions.forEach(prescription => {
             const motorNumber = prescription.motor_number;
@@ -115,7 +178,7 @@ class PatientManager {
             motorGroups[motorNumber].push(prescription);
         });
         
-        // Create cards for each motor
+        // Créer des cartes pour chaque moteur
         Object.entries(motorGroups).forEach(([motorNumber, prescriptions]) => {
             const card = document.createElement('div');
             card.className = 'prescription-card';
@@ -138,10 +201,10 @@ class PatientManager {
                 detail.className = 'prescription-detail';
                 
                 const nameSpan = document.createElement('span');
-                nameSpan.textContent = prescription.medication_name;
+                nameSpan.textContent = prescription.medication_name || "Médicament";
                 
                 const infoSpan = document.createElement('span');
-                infoSpan.textContent = `${prescription.medication_dosage} - ${prescription.intake_time}`;
+                infoSpan.textContent = `${prescription.medication_dosage || ""} - ${prescription.intake_time || ""}`;
                 
                 detail.appendChild(nameSpan);
                 detail.appendChild(infoSpan);
@@ -155,11 +218,17 @@ class PatientManager {
             
             const openButton = document.createElement('button');
             openButton.textContent = 'Ouvrir';
-            openButton.addEventListener('click', () => this.controlPillbox(motorNumber, 'open'));
+            openButton.addEventListener('click', () => {
+                console.log(`Demande d'ouverture du compartiment ${motorNumber}`);
+                this.controlPillbox(motorNumber, 'open');
+            });
             
             const closeButton = document.createElement('button');
             closeButton.textContent = 'Fermer';
-            closeButton.addEventListener('click', () => this.controlPillbox(motorNumber, 'close'));
+            closeButton.addEventListener('click', () => {
+                console.log(`Demande de fermeture du compartiment ${motorNumber}`);
+                this.controlPillbox(motorNumber, 'close');
+            });
             
             actions.appendChild(openButton);
             actions.appendChild(closeButton);
@@ -170,45 +239,61 @@ class PatientManager {
     }
     
     /**
-     * Control a pillbox compartment
-     * @param {number} motorNumber - Motor number to control
-     * @param {string} action - Action to perform ('open' or 'close')
+     * Contrôler un compartiment du pilulier
+     * @param {number} motorNumber - Numéro du moteur à contrôler
+     * @param {string} action - Action à effectuer ('open' ou 'close')
      */
     async controlPillbox(motorNumber, action) {
+        console.log(`Contrôle du pilulier: moteur ${motorNumber}, action ${action}`);
+        
         try {
             const response = await ApiService.controlPillbox(motorNumber, action);
             
             if (response.success) {
+                console.log("Contrôle du pilulier réussi");
                 alert(`Le compartiment ${motorNumber} a été ${action === 'open' ? 'ouvert' : 'fermé'} avec succès.`);
             } else {
+                console.log("Échec du contrôle du pilulier:", response.message);
                 alert(`Erreur lors du contrôle du compartiment ${motorNumber}.`);
             }
         } catch (error) {
-            console.error('Pillbox control error:', error);
+            console.error('Erreur de contrôle du pilulier:', error);
             alert('Une erreur est survenue lors du contrôle du pilulier.');
         }
     }
     
     /**
-     * Load doctors for messaging
+     * Charger les médecins pour la messagerie
      */
     async loadDoctors() {
+        console.log("Chargement des médecins");
+        
         try {
             const response = await ApiService.getUsers(true);
             
             if (response.success) {
+                console.log("Médecins chargés:", response.users);
                 this.doctors = response.users;
                 this.renderMessageList();
+            } else {
+                console.log("Échec du chargement des médecins:", response.message);
             }
         } catch (error) {
-            console.error('Error loading doctors:', error);
+            console.error('Erreur de chargement des médecins:', error);
         }
     }
     
     /**
-     * Render message contacts in the UI
+     * Afficher les contacts de messagerie dans l'interface utilisateur
      */
     renderMessageList() {
+        console.log("Affichage de la liste des contacts");
+        
+        if (!this.messageList) {
+            console.error("Élément messageList introuvable");
+            return;
+        }
+        
         this.messageList.innerHTML = '';
         
         if (this.doctors.length === 0) {
@@ -226,58 +311,94 @@ class PatientManager {
             name.textContent = `Dr. ${doctor.first_name} ${doctor.last_name}`;
             
             contact.appendChild(name);
-            contact.addEventListener('click', () => this.showConversation(doctor.id, `Dr. ${doctor.first_name} ${doctor.last_name}`));
+            contact.addEventListener('click', () => {
+                console.log(`Conversation avec le médecin ${doctor.id} sélectionnée`);
+                this.showConversation(doctor.id, `Dr. ${doctor.first_name} ${doctor.last_name}`);
+            });
             
             this.messageList.appendChild(contact);
         });
     }
     
     /**
-     * Show conversation with a specific user
-     * @param {number} userId - User ID of the conversation partner
-     * @param {string} userName - Name of the conversation partner
+     * Afficher la conversation avec un utilisateur spécifique
+     * @param {number} userId - ID de l'utilisateur de la conversation
+     * @param {string} userName - Nom de l'utilisateur de la conversation
      */
     async showConversation(userId, userName) {
-        this.currentConversationUserId = userId;
-        this.conversationRecipient.textContent = userName;
+        console.log(`Affichage de la conversation avec: ${userName} (ID: ${userId})`);
         
-        this.messageList.style.display = 'none';
-        this.conversation.classList.add('active');
+        this.currentConversationUserId = userId;
+        
+        if (this.conversationRecipient) {
+            this.conversationRecipient.textContent = userName;
+        }
+        
+        if (this.messageList && this.conversation) {
+            this.messageList.style.display = 'none';
+            this.conversation.classList.add('active');
+            
+            // Supprimer la classe hidden pour compatibilité avec les anciens styles
+            this.conversation.classList.remove('hidden');
+        }
         
         await this.loadConversation();
     }
     
     /**
-     * Show message list and hide conversation
+     * Afficher la liste des messages et masquer la conversation
      */
     showMessageList() {
-        this.messageList.style.display = 'block';
-        this.conversation.classList.remove('active');
+        console.log("Retour à la liste des messages");
+        
+        if (this.messageList && this.conversation) {
+            this.messageList.style.display = 'block';
+            this.conversation.classList.remove('active');
+            
+            // Ajouter la classe hidden pour compatibilité avec les anciens styles
+            this.conversation.classList.add('hidden');
+        }
+        
         this.currentConversationUserId = null;
     }
     
     /**
-     * Load conversation with current user
+     * Charger la conversation avec l'utilisateur actuel
      */
     async loadConversation() {
-        if (!this.currentConversationUserId) return;
+        console.log("Chargement de la conversation");
+        
+        if (!this.currentConversationUserId) {
+            console.log("Aucun utilisateur de conversation sélectionné");
+            return;
+        }
         
         try {
             const response = await ApiService.getConversation(this.currentConversationUserId);
             
             if (response.success) {
+                console.log("Conversation chargée:", response.messages);
                 this.renderConversation(response.messages);
+            } else {
+                console.log("Échec du chargement de la conversation:", response.message);
             }
         } catch (error) {
-            console.error('Error loading conversation:', error);
+            console.error('Erreur de chargement de la conversation:', error);
         }
     }
     
     /**
-     * Render conversation messages in the UI
-     * @param {Array} messages - Array of message objects
+     * Afficher les messages de la conversation dans l'interface utilisateur
+     * @param {Array} messages - Tableau d'objets de message
      */
     renderConversation(messages) {
+        console.log("Affichage de la conversation");
+        
+        if (!this.messageContainer) {
+            console.error("Élément messageContainer introuvable");
+            return;
+        }
+        
         this.messageContainer.innerHTML = '';
         
         if (messages.length === 0) {
@@ -289,6 +410,11 @@ class PatientManager {
         }
         
         const currentUser = window.authManager.getCurrentUser();
+        
+        if (!currentUser) {
+            console.error("Aucun utilisateur connecté");
+            return;
+        }
         
         messages.forEach(message => {
             const messageElement = document.createElement('div');
@@ -308,29 +434,41 @@ class PatientManager {
             this.messageContainer.appendChild(messageElement);
         });
         
-        // Scroll to bottom
+        // Faire défiler vers le bas
         this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
     }
     
     /**
-     * Send a message in the current conversation
+     * Envoyer un message dans la conversation actuelle
      */
     async sendMessage() {
+        console.log("Envoi d'un message");
+        
+        if (!this.messageInput || !this.currentConversationUserId) {
+            console.error("Élément messageInput introuvable ou aucun destinataire sélectionné");
+            return;
+        }
+        
         const content = this.messageInput.value.trim();
         
-        if (!content || !this.currentConversationUserId) {
+        if (!content) {
+            console.log("Message vide, annulation de l'envoi");
             return;
         }
         
         try {
+            console.log(`Envoi du message au destinataire ${this.currentConversationUserId}: "${content}"`);
             const response = await ApiService.sendMessage(this.currentConversationUserId, content);
             
             if (response.success) {
+                console.log("Message envoyé avec succès");
                 this.messageInput.value = '';
                 await this.loadConversation();
+            } else {
+                console.log("Échec de l'envoi du message:", response.message);
             }
         } catch (error) {
-            console.error('Error sending message:', error);
+            console.error('Erreur d\'envoi de message:', error);
             alert('Erreur lors de l\'envoi du message. Veuillez réessayer.');
         }
     }

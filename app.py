@@ -8,7 +8,7 @@ from services import AuthService, UserService, MedicationService, PrescriptionSe
 from models import Medication, Prescription, Message
 
 # Create Flask app
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__, static_folder='static', static_url_path='')
 app.secret_key = 'pillbox_secret_key'  # Change in production
 app.config['SESSION_TYPE'] = 'filesystem'
 
@@ -276,3 +276,20 @@ if __name__ == '__main__':
     # Make sure the static directory exists
     os.makedirs('static', exist_ok=True)
     app.run(debug=True)
+
+
+    # Add these routes to your app.py file
+
+@app.route('/debug/ping', methods=['GET'])
+def debug_ping():
+    """Simple endpoint to test if the API is working."""
+    return jsonify({'success': True, 'message': 'API is working'})
+
+@app.route('/debug/users', methods=['GET'])
+def debug_users():
+    """List all users for debugging."""
+    users = UserRepository.get_all()
+    return jsonify({
+        'success': True,
+        'users': [{'id': user.id, 'username': user.username, 'is_doctor': user.is_doctor} for user in users]
+    })

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
     <div class="container">
         <!-- Login Screen -->
@@ -39,20 +41,20 @@
                     <button id="patient-logout" class="logout-button"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </header>
-            
+
             <div class="tab-container">
                 <div class="tabs">
                     <button id="medications-tab" class="tab-button active">Médicaments</button>
                     <button id="messages-tab" class="tab-button">Messages</button>
                 </div>
-                
+
                 <div id="medications-panel" class="tab-panel active">
                     <h2>Mes Médicaments</h2>
                     <div class="prescription-list" id="patient-prescription-list">
                         <!-- Prescription items will be added here dynamically -->
                     </div>
                 </div>
-                
+
                 <div id="messages-panel" class="tab-panel">
                     <h2>Messages</h2>
                     <div class="message-list" id="patient-message-list">
@@ -60,7 +62,8 @@
                     </div>
                     <div class="conversation" id="patient-conversation">
                         <div class="conversation-header">
-                            <button id="back-to-message-list" class="back-button"><i class="fas fa-arrow-left"></i></button>
+                            <button id="back-to-message-list" class="back-button"><i
+                                    class="fas fa-arrow-left"></i></button>
                             <h3 id="conversation-recipient"></h3>
                         </div>
                         <div class="message-container" id="message-container">
@@ -84,34 +87,36 @@
                     <button id="doctor-logout" class="logout-button"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </header>
-            
+
             <div class="tab-container">
                 <div class="tabs">
                     <button id="prescriptions-tab" class="tab-button active">Prescriptions</button>
                     <button id="doc-medications-tab" class="tab-button">Médicaments</button>
                     <button id="doc-messages-tab" class="tab-button">Messages</button>
                 </div>
-                
+
                 <div id="prescriptions-panel" class="tab-panel active">
                     <div class="panel-actions">
                         <h2>Prescriptions</h2>
-                        <button id="add-prescription" class="action-button"><i class="fas fa-plus"></i> Nouvelle Prescription</button>
+                        <button id="add-prescription" class="action-button"><i class="fas fa-plus"></i> Nouvelle
+                            Prescription</button>
                     </div>
                     <div class="prescription-list" id="doctor-prescription-list">
                         <!-- Prescription items will be added here dynamically -->
                     </div>
                 </div>
-                
+
                 <div id="doc-medications-panel" class="tab-panel">
                     <div class="panel-actions">
                         <h2>Médicaments</h2>
-                        <button id="add-medication" class="action-button"><i class="fas fa-plus"></i> Nouveau Médicament</button>
+                        <button id="add-medication" class="action-button"><i class="fas fa-plus"></i> Nouveau
+                            Médicament</button>
                     </div>
                     <div class="medication-list" id="medication-list">
                         <!-- Medication items will be added here dynamically -->
                     </div>
                 </div>
-                
+
                 <div id="doc-messages-panel" class="tab-panel">
                     <h2>Messages</h2>
                     <div class="message-list" id="doctor-message-list">
@@ -119,7 +124,8 @@
                     </div>
                     <div class="conversation" id="doctor-conversation">
                         <div class="conversation-header">
-                            <button id="back-to-doctor-message-list" class="back-button"><i class="fas fa-arrow-left"></i></button>
+                            <button id="back-to-doctor-message-list" class="back-button"><i
+                                    class="fas fa-arrow-left"></i></button>
                             <h3 id="doctor-conversation-recipient"></h3>
                         </div>
                         <div class="message-container" id="doctor-message-container">
@@ -127,7 +133,8 @@
                         </div>
                         <div class="message-input">
                             <textarea id="doctor-message-input" placeholder="Écrivez votre message ici..."></textarea>
-                            <button id="doctor-send-message" class="send-button"><i class="fas fa-paper-plane"></i></button>
+                            <button id="doctor-send-message" class="send-button"><i
+                                    class="fas fa-paper-plane"></i></button>
                         </div>
                     </div>
                 </div>
@@ -195,10 +202,12 @@
     </div>
 
     <!-- JavaScript Files -->
+    <script src="js/login.js"></script>
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/patient.js"></script>
     <script src="js/doctor.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>

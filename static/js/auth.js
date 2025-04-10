@@ -1,13 +1,13 @@
 /**
- * Authentication Module
- * Handles user authentication and session management
+ * Module d'authentification
+ * Gère l'authentification des utilisateurs et la gestion des sessions
  */
 class AuthManager {
     constructor() {
         this.currentUser = null;
         this.isDoctor = false;
         
-        // DOM Elements - Login Screen
+        // Éléments DOM - Écran de connexion
         this.loginScreen = document.getElementById('login-screen');
         this.patientToggle = document.getElementById('patient-toggle');
         this.doctorToggle = document.getElementById('doctor-toggle');
@@ -16,7 +16,7 @@ class AuthManager {
         this.loginButton = document.getElementById('login-button');
         this.loginError = document.getElementById('login-error');
         
-        // DOM Elements - Dashboard Screens
+        // Éléments DOM - Tableaux de bord
         this.patientDashboard = document.getElementById('patient-dashboard');
         this.doctorDashboard = document.getElementById('doctor-dashboard');
         this.patientName = document.getElementById('patient-name');
@@ -24,36 +24,85 @@ class AuthManager {
         this.patientLogout = document.getElementById('patient-logout');
         this.doctorLogout = document.getElementById('doctor-logout');
         
-        // Bind event handlers
+        // Vérifie si tous les éléments DOM sont présents
+        console.log("Éléments d'authentification:", {
+            loginScreen: this.loginScreen,
+            patientToggle: this.patientToggle,
+            doctorToggle: this.doctorToggle,
+            usernameInput: this.usernameInput,
+            passwordInput: this.passwordInput,
+            loginButton: this.loginButton,
+            loginError: this.loginError,
+            patientDashboard: this.patientDashboard,
+            doctorDashboard: this.doctorDashboard
+        });
+        
+        // Associer les gestionnaires d'événements
         this.bindEvents();
     }
     
     /**
-     * Bind event handlers to DOM elements
+     * Associer les gestionnaires d'événements aux éléments DOM
      */
     bindEvents() {
-        // Toggle between patient and doctor login
-        this.patientToggle.addEventListener('click', () => this.toggleUserType('patient'));
-        this.doctorToggle.addEventListener('click', () => this.toggleUserType('doctor'));
+        console.log("Attachement des événements d'authentification");
         
-        // Login button
-        this.loginButton.addEventListener('click', () => this.login());
+        // Basculer entre la connexion patient et médecin
+        if (this.patientToggle) {
+            this.patientToggle.addEventListener('click', () => {
+                console.log("Basculement vers Patient");
+                this.toggleUserType('patient');
+            });
+        }
         
-        // Enter key in password field
-        this.passwordInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.login();
-        });
+        if (this.doctorToggle) {
+            this.doctorToggle.addEventListener('click', () => {
+                console.log("Basculement vers Médecin");
+                this.toggleUserType('doctor');
+            });
+        }
         
-        // Logout buttons
-        this.patientLogout.addEventListener('click', () => this.logout());
-        this.doctorLogout.addEventListener('click', () => this.logout());
+        // Bouton de connexion
+        if (this.loginButton) {
+            this.loginButton.addEventListener('click', () => {
+                console.log("Bouton de connexion cliqué");
+                this.login();
+            });
+        }
+        
+        // Touche Entrée dans le champ du mot de passe
+        if (this.passwordInput) {
+            this.passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    console.log("Touche Entrée pressée dans le champ mot de passe");
+                    this.login();
+                }
+            });
+        }
+        
+        // Boutons de déconnexion
+        if (this.patientLogout) {
+            this.patientLogout.addEventListener('click', () => {
+                console.log("Déconnexion patient");
+                this.logout();
+            });
+        }
+        
+        if (this.doctorLogout) {
+            this.doctorLogout.addEventListener('click', () => {
+                console.log("Déconnexion médecin");
+                this.logout();
+            });
+        }
     }
     
     /**
-     * Toggle between patient and doctor login
-     * @param {string} userType - 'patient' or 'doctor'
+     * Basculer entre les types d'utilisateur (patient ou médecin)
+     * @param {string} userType - 'patient' ou 'doctor'
      */
     toggleUserType(userType) {
+        console.log(`Basculement du type d'utilisateur vers: ${userType}`);
+        
         if (userType === 'patient') {
             this.patientToggle.classList.add('active');
             this.doctorToggle.classList.remove('active');
@@ -66,41 +115,63 @@ class AuthManager {
     }
     
     /**
-     * Attempt to log in with current credentials
+     * Tenter de se connecter avec les identifiants actuels
      */
     async login() {
         const username = this.usernameInput.value.trim();
         const password = this.passwordInput.value;
+        
+        console.log(`Tentative de connexion avec: ${username}`);
         
         if (!username || !password) {
             this.showLoginError('Veuillez remplir tous les champs.');
             return;
         }
         
+        // Option de test - permet de se connecter sans API
+        // Utile pour déboguer l'interface utilisateur
+        if (username === 'test' && password === 'test') {
+            console.log("Connexion de test réussie");
+            this.currentUser = {
+                id: 0,
+                first_name: 'Utilisateur',
+                last_name: 'Test',
+                is_doctor: this.isDoctor
+            };
+            this.showDashboard();
+            this.clearLoginForm();
+            return;
+        }
+        
         try {
+            console.log("Envoi de la requête API de connexion");
             const response = await ApiService.login(username, password);
             
             if (response.success) {
+                console.log("Connexion réussie:", response.user);
                 this.currentUser = response.user;
                 this.showDashboard();
                 this.clearLoginForm();
             } else {
+                console.log("Échec de la connexion:", response.message);
                 this.showLoginError(response.message || 'Identifiants invalides.');
             }
         } catch (error) {
-            console.error('Login error:', error);
+            console.error('Erreur de connexion:', error);
             this.showLoginError('Une erreur est survenue. Veuillez réessayer.');
         }
     }
     
     /**
-     * Log out current user
+     * Déconnecter l'utilisateur actuel
      */
     async logout() {
+        console.log("Déconnexion de l'utilisateur");
+        
         try {
             await ApiService.logout();
         } catch (error) {
-            console.error('Logout error:', error);
+            console.error('Erreur de déconnexion:', error);
         } finally {
             this.currentUser = null;
             this.showLoginScreen();
@@ -108,41 +179,54 @@ class AuthManager {
     }
     
     /**
-     * Show login error message
-     * @param {string} message - Error message to display
+     * Afficher un message d'erreur de connexion
+     * @param {string} message - Message d'erreur à afficher
      */
     showLoginError(message) {
-        this.loginError.textContent = message;
-        this.loginError.style.display = 'block';
+        console.log("Affichage de l'erreur de connexion:", message);
+        
+        if (this.loginError) {
+            this.loginError.textContent = message;
+            this.loginError.style.display = 'block';
+        } else {
+            // Fallback si l'élément d'erreur n'est pas trouvé
+            alert(`Erreur de connexion: ${message}`);
+        }
     }
     
     /**
-     * Clear login form and error message
+     * Effacer le formulaire de connexion et le message d'erreur
      */
     clearLoginForm() {
-        this.usernameInput.value = '';
-        this.passwordInput.value = '';
-        this.loginError.textContent = '';
-        this.loginError.style.display = 'none';
+        console.log("Effacement du formulaire de connexion");
+        
+        if (this.usernameInput) this.usernameInput.value = '';
+        if (this.passwordInput) this.passwordInput.value = '';
+        if (this.loginError) {
+            this.loginError.textContent = '';
+            this.loginError.style.display = 'none';
+        }
     }
     
     /**
-     * Show appropriate dashboard based on user type
+     * Afficher le tableau de bord approprié en fonction du type d'utilisateur
      */
     showDashboard() {
-        this.loginScreen.classList.add('hidden');
+        console.log("Affichage du tableau de bord pour:", this.currentUser);
+        
+        if (this.loginScreen) this.loginScreen.classList.add('hidden');
         
         if (this.currentUser.is_doctor) {
-            this.doctorDashboard.classList.remove('hidden');
-            this.doctorName.textContent = `${this.currentUser.first_name} ${this.currentUser.last_name}`;
-            // Trigger initial data load for doctor
+            if (this.doctorDashboard) this.doctorDashboard.classList.remove('hidden');
+            if (this.doctorName) this.doctorName.textContent = `${this.currentUser.first_name} ${this.currentUser.last_name}`;
+            // Déclencher le chargement initial des données pour le médecin
             if (window.doctorManager) {
                 window.doctorManager.loadData();
             }
         } else {
-            this.patientDashboard.classList.remove('hidden');
-            this.patientName.textContent = `${this.currentUser.first_name} ${this.currentUser.last_name}`;
-            // Trigger initial data load for patient
+            if (this.patientDashboard) this.patientDashboard.classList.remove('hidden');
+            if (this.patientName) this.patientName.textContent = `${this.currentUser.first_name} ${this.currentUser.last_name}`;
+            // Déclencher le chargement initial des données pour le patient
             if (window.patientManager) {
                 window.patientManager.loadData();
             }
@@ -150,17 +234,19 @@ class AuthManager {
     }
     
     /**
-     * Show login screen and hide dashboards
+     * Afficher l'écran de connexion et masquer les tableaux de bord
      */
     showLoginScreen() {
-        this.loginScreen.classList.remove('hidden');
-        this.patientDashboard.classList.add('hidden');
-        this.doctorDashboard.classList.add('hidden');
+        console.log("Retour à l'écran de connexion");
+        
+        if (this.loginScreen) this.loginScreen.classList.remove('hidden');
+        if (this.patientDashboard) this.patientDashboard.classList.add('hidden');
+        if (this.doctorDashboard) this.doctorDashboard.classList.add('hidden');
     }
     
     /**
-     * Get current authenticated user
-     * @returns {Object|null} - Current user object or null if not authenticated
+     * Obtenir l'utilisateur authentifié actuel
+     * @returns {Object|null} - Objet utilisateur actuel ou null si non authentifié
      */
     getCurrentUser() {
         return this.currentUser;

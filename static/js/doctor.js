@@ -1,10 +1,12 @@
 /**
- * Doctor Dashboard Manager
- * Handles doctor-specific functionality
+ * Gestionnaire du tableau de bord médecin
+ * Gère les fonctionnalités spécifiques aux médecins
  */
 class DoctorManager {
     constructor() {
-        // DOM Elements - Tabs
+        console.log("Initialisation du gestionnaire médecin");
+        
+        // Éléments DOM - Onglets
         this.prescriptionsTab = document.getElementById('prescriptions-tab');
         this.medicationsTab = document.getElementById('doc-medications-tab');
         this.messagesTab = document.getElementById('doc-messages-tab');
@@ -12,15 +14,15 @@ class DoctorManager {
         this.medicationsPanel = document.getElementById('doc-medications-panel');
         this.messagesPanel = document.getElementById('doc-messages-panel');
         
-        // DOM Elements - Prescriptions
+        // Éléments DOM - Prescriptions
         this.prescriptionList = document.getElementById('doctor-prescription-list');
         this.addPrescriptionButton = document.getElementById('add-prescription');
         
-        // DOM Elements - Medications
+        // Éléments DOM - Médicaments
         this.medicationList = document.getElementById('medication-list');
         this.addMedicationButton = document.getElementById('add-medication');
         
-        // DOM Elements - Messages
+        // Éléments DOM - Messages
         this.messageList = document.getElementById('doctor-message-list');
         this.conversation = document.getElementById('doctor-conversation');
         this.conversationRecipient = document.getElementById('doctor-conversation-recipient');
@@ -29,7 +31,7 @@ class DoctorManager {
         this.sendMessageButton = document.getElementById('doctor-send-message');
         this.backToMessageList = document.getElementById('back-to-doctor-message-list');
         
-        // DOM Elements - Modals
+        // Éléments DOM - Modales
         this.medicationModal = document.getElementById('medication-modal');
         this.closeMedicationModal = document.getElementById('close-medication-modal');
         this.medicationNameInput = document.getElementById('medication-name');
@@ -44,137 +46,253 @@ class DoctorManager {
         this.prescriptionTimeInput = document.getElementById('prescription-time');
         this.savePrescriptionButton = document.getElementById('save-prescription');
         
-        // State
+        // État
         this.prescriptions = [];
         this.medications = [];
         this.patients = [];
         this.currentConversationUserId = null;
         
-        // Bind events
+        // Vérification des éléments DOM
+        console.log("Éléments du tableau de bord médecin:", {
+            prescriptionsTab: this.prescriptionsTab,
+            medicationsTab: this.medicationsTab,
+            messagesTab: this.messagesTab,
+            addPrescriptionButton: this.addPrescriptionButton,
+            addMedicationButton: this.addMedicationButton,
+            medicationModal: this.medicationModal,
+            prescriptionModal: this.prescriptionModal
+        });
+        
+        // Associer les gestionnaires d'événements
         this.bindEvents();
     }
     
     /**
-     * Bind event handlers to DOM elements
+     * Associer les gestionnaires d'événements aux éléments DOM
      */
     bindEvents() {
-        // Tab navigation
-        this.prescriptionsTab.addEventListener('click', () => this.switchTab('prescriptions'));
-        this.medicationsTab.addEventListener('click', () => this.switchTab('medications'));
-        this.messagesTab.addEventListener('click', () => this.switchTab('messages'));
+        console.log("Attachement des événements du tableau de bord médecin");
         
-        // Add buttons
-        this.addMedicationButton.addEventListener('click', () => this.showMedicationModal());
-        this.addPrescriptionButton.addEventListener('click', () => this.showPrescriptionModal());
+        // Navigation par onglets
+        if (this.prescriptionsTab) {
+            this.prescriptionsTab.addEventListener('click', () => {
+                console.log("Onglet Prescriptions cliqué");
+                this.switchTab('prescriptions');
+            });
+        }
         
-        // Modal close buttons
-        this.closeMedicationModal.addEventListener('click', () => this.hideMedicationModal());
-        this.closePrescriptionModal.addEventListener('click', () => this.hidePrescriptionModal());
+        if (this.medicationsTab) {
+            this.medicationsTab.addEventListener('click', () => {
+                console.log("Onglet Médicaments cliqué");
+                this.switchTab('medications');
+            });
+        }
         
-        // Modal save buttons
-        this.saveMedicationButton.addEventListener('click', () => this.saveMedication());
-        this.savePrescriptionButton.addEventListener('click', () => this.savePrescription());
+        if (this.messagesTab) {
+            this.messagesTab.addEventListener('click', () => {
+                console.log("Onglet Messages cliqué");
+                this.switchTab('messages');
+            });
+        }
         
-        // Message handling
-        this.sendMessageButton.addEventListener('click', () => this.sendMessage());
-        this.backToMessageList.addEventListener('click', () => this.showMessageList());
+        // Boutons d'ajout
+        if (this.addMedicationButton) {
+            this.addMedicationButton.addEventListener('click', () => {
+                console.log("Bouton Ajouter un médicament cliqué");
+                this.showMedicationModal();
+            });
+        }
         
-        // Message input - send on Enter, new line on Shift+Enter
-        this.messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
+        if (this.addPrescriptionButton) {
+            this.addPrescriptionButton.addEventListener('click', () => {
+                console.log("Bouton Ajouter une prescription cliqué");
+                this.showPrescriptionModal();
+            });
+        }
+        
+        // Boutons de fermeture des modales
+        if (this.closeMedicationModal) {
+            this.closeMedicationModal.addEventListener('click', () => {
+                console.log("Fermeture de la modale Médicament");
+                this.hideMedicationModal();
+            });
+        }
+        
+        if (this.closePrescriptionModal) {
+            this.closePrescriptionModal.addEventListener('click', () => {
+                console.log("Fermeture de la modale Prescription");
+                this.hidePrescriptionModal();
+            });
+        }
+        
+        // Boutons de sauvegarde des modales
+        if (this.saveMedicationButton) {
+            this.saveMedicationButton.addEventListener('click', () => {
+                console.log("Sauvegarde du médicament");
+                this.saveMedication();
+            });
+        }
+        
+        if (this.savePrescriptionButton) {
+            this.savePrescriptionButton.addEventListener('click', () => {
+                console.log("Sauvegarde de la prescription");
+                this.savePrescription();
+            });
+        }
+        
+        // Gestion des messages
+        if (this.sendMessageButton) {
+            this.sendMessageButton.addEventListener('click', () => {
+                console.log("Bouton d'envoi de message cliqué");
                 this.sendMessage();
-            }
-        });
+            });
+        }
+        
+        if (this.backToMessageList) {
+            this.backToMessageList.addEventListener('click', () => {
+                console.log("Retour à la liste des messages");
+                this.showMessageList();
+            });
+        }
+        
+        // Champ de saisie de message - envoyer avec Entrée, nouvelle ligne avec Maj+Entrée
+        if (this.messageInput) {
+            this.messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.sendMessage();
+                }
+            });
+        }
     }
     
     /**
-     * Switch between tabs
-     * @param {string} tab - Tab name to switch to
+     * Basculer entre les onglets
+     * @param {string} tab - Nom de l'onglet à afficher
      */
     switchTab(tab) {
-        // Update tab buttons
-        this.prescriptionsTab.classList.toggle('active', tab === 'prescriptions');
-        this.medicationsTab.classList.toggle('active', tab === 'medications');
-        this.messagesTab.classList.toggle('active', tab === 'messages');
+        console.log(`Basculement vers l'onglet: ${tab}`);
         
-        // Update tab panels
-        this.prescriptionsPanel.classList.toggle('active', tab === 'prescriptions');
-        this.medicationsPanel.classList.toggle('active', tab === 'medications');
-        this.messagesPanel.classList.toggle('active', tab === 'messages');
+        // Mettre à jour les boutons d'onglet
+        if (this.prescriptionsTab && this.medicationsTab && this.messagesTab) {
+            this.prescriptionsTab.classList.toggle('active', tab === 'prescriptions');
+            this.medicationsTab.classList.toggle('active', tab === 'medications');
+            this.messagesTab.classList.toggle('active', tab === 'messages');
+        }
         
-        // Load data if switching to messages tab
+        // Mettre à jour les panneaux d'onglet
+        if (this.prescriptionsPanel && this.medicationsPanel && this.messagesPanel) {
+            this.prescriptionsPanel.classList.toggle('active', tab === 'prescriptions');
+            this.medicationsPanel.classList.toggle('active', tab === 'medications');
+            this.messagesPanel.classList.toggle('active', tab === 'messages');
+            
+            // Supprimer la classe hidden pour compatibilité avec les anciens styles
+            this.prescriptionsPanel.classList.toggle('hidden', tab !== 'prescriptions');
+            this.medicationsPanel.classList.toggle('hidden', tab !== 'medications');
+            this.messagesPanel.classList.toggle('hidden', tab !== 'messages');
+        }
+        
+        // Charger les données si passage à l'onglet messages
         if (tab === 'messages') {
             this.loadPatients();
         }
     }
     
     /**
-     * Load all data for the doctor dashboard
+     * Charger toutes les données pour le tableau de bord médecin
      */
     async loadData() {
-        await Promise.all([
-            this.loadPrescriptions(),
-            this.loadMedications(),
-            this.loadPatients()
-        ]);
+        console.log("Chargement des données du médecin");
+        
+        try {
+            await Promise.all([
+                this.loadPrescriptions(),
+                this.loadMedications(),
+                this.loadPatients()
+            ]);
+            console.log("Toutes les données du médecin ont été chargées");
+        } catch (error) {
+            console.error("Erreur lors du chargement des données du médecin:", error);
+        }
     }
     
     /**
-     * Load prescriptions created by the current doctor
+     * Charger les prescriptions créées par le médecin actuel
      */
     async loadPrescriptions() {
+        console.log("Chargement des prescriptions");
+        
         try {
             const response = await ApiService.getPrescriptions();
             
             if (response.success) {
+                console.log("Prescriptions chargées:", response.prescriptions);
                 this.prescriptions = response.prescriptions;
                 this.renderPrescriptions();
+            } else {
+                console.log("Échec du chargement des prescriptions:", response.message);
             }
         } catch (error) {
-            console.error('Error loading prescriptions:', error);
+            console.error('Erreur de chargement des prescriptions:', error);
         }
     }
     
     /**
-     * Load medications
+     * Charger les médicaments
      */
     async loadMedications() {
+        console.log("Chargement des médicaments");
+        
         try {
             const response = await ApiService.getMedications();
             
             if (response.success) {
+                console.log("Médicaments chargés:", response.medications);
                 this.medications = response.medications;
                 this.renderMedications();
+            } else {
+                console.log("Échec du chargement des médicaments:", response.message);
             }
         } catch (error) {
-            console.error('Error loading medications:', error);
+            console.error('Erreur de chargement des médicaments:', error);
         }
     }
     
     /**
-     * Load patients for prescriptions and messaging
+     * Charger les patients pour les prescriptions et la messagerie
      */
     async loadPatients() {
+        console.log("Chargement des patients");
+        
         try {
             const response = await ApiService.getUsers(false);
             
             if (response.success) {
+                console.log("Patients chargés:", response.users);
                 this.patients = response.users;
                 this.renderMessageList();
                 
-                // Update the patient select in the prescription modal
+                // Mettre à jour la sélection de patient dans la modale de prescription
                 this.populatePrescriptionModal();
+            } else {
+                console.log("Échec du chargement des patients:", response.message);
             }
         } catch (error) {
-            console.error('Error loading patients:', error);
+            console.error('Erreur de chargement des patients:', error);
         }
     }
     
     /**
-     * Render prescriptions in the UI
+     * Afficher les prescriptions dans l'interface utilisateur
      */
     renderPrescriptions() {
+        console.log("Affichage des prescriptions");
+        
+        if (!this.prescriptionList) {
+            console.error("Élément prescriptionList introuvable");
+            return;
+        }
+        
         this.prescriptionList.innerHTML = '';
         
         if (this.prescriptions.length === 0) {
@@ -192,7 +310,7 @@ class DoctorManager {
             
             const title = document.createElement('div');
             title.className = 'prescription-title';
-            title.textContent = prescription.patient_name;
+            title.textContent = prescription.patient_name || "Patient";
             
             const status = document.createElement('div');
             status.className = 'prescription-status';
@@ -206,23 +324,27 @@ class DoctorManager {
             const details = document.createElement('div');
             details.className = 'prescription-details';
             
+            // Détails du médicament
             const medicationDetail = document.createElement('div');
             medicationDetail.className = 'prescription-detail';
-            medicationDetail.innerHTML = `<span>Médicament:</span><span>${prescription.medication_name} (${prescription.medication_dosage})</span>`;
+            medicationDetail.innerHTML = `<span>Médicament:</span><span>${prescription.medication_name || "Inconnu"} (${prescription.medication_dosage || ""})</span>`;
             
+            // Détails du compartiment
             const compartmentDetail = document.createElement('div');
             compartmentDetail.className = 'prescription-detail';
-            compartmentDetail.innerHTML = `<span>Compartiment:</span><span>${prescription.motor_number}</span>`;
+            compartmentDetail.innerHTML = `<span>Compartiment:</span><span>${prescription.motor_number || "N/A"}</span>`;
             
+            // Détails de l'heure
             const timeDetail = document.createElement('div');
             timeDetail.className = 'prescription-detail';
-            timeDetail.innerHTML = `<span>Heure:</span><span>${prescription.intake_time}</span>`;
+            timeDetail.innerHTML = `<span>Heure:</span><span>${prescription.intake_time || "N/A"}</span>`;
             
             details.appendChild(medicationDetail);
             details.appendChild(compartmentDetail);
             details.appendChild(timeDetail);
             card.appendChild(details);
             
+            // Boutons d'action (uniquement pour les prescriptions actives)
             if (prescription.active) {
                 const actions = document.createElement('div');
                 actions.className = 'prescription-actions';
@@ -230,7 +352,10 @@ class DoctorManager {
                 const deactivateButton = document.createElement('button');
                 deactivateButton.className = 'deactivate';
                 deactivateButton.textContent = 'Désactiver';
-                deactivateButton.addEventListener('click', () => this.deactivatePrescription(prescription.id));
+                deactivateButton.addEventListener('click', () => {
+                    console.log(`Demande de désactivation de la prescription ${prescription.id}`);
+                    this.deactivatePrescription(prescription.id);
+                });
                 
                 actions.appendChild(deactivateButton);
                 card.appendChild(actions);
@@ -241,9 +366,16 @@ class DoctorManager {
     }
     
     /**
-     * Render medications in the UI
+     * Afficher les médicaments dans l'interface utilisateur
      */
     renderMedications() {
+        console.log("Affichage des médicaments");
+        
+        if (!this.medicationList) {
+            console.error("Élément medicationList introuvable");
+            return;
+        }
+        
         this.medicationList.innerHTML = '';
         
         if (this.medications.length === 0) {
@@ -257,11 +389,11 @@ class DoctorManager {
             
             const name = document.createElement('div');
             name.className = 'medication-name';
-            name.textContent = medication.name;
+            name.textContent = medication.name || "Nom inconnu";
             
             const dosage = document.createElement('div');
             dosage.className = 'medication-dosage';
-            dosage.textContent = medication.dosage;
+            dosage.textContent = medication.dosage || "Dosage inconnu";
             
             card.appendChild(name);
             card.appendChild(dosage);
@@ -271,9 +403,16 @@ class DoctorManager {
     }
     
     /**
-     * Render message contacts in the UI
+     * Afficher les contacts de messagerie dans l'interface utilisateur
      */
     renderMessageList() {
+        console.log("Affichage de la liste des contacts");
+        
+        if (!this.messageList) {
+            console.error("Élément messageList introuvable");
+            return;
+        }
+        
         this.messageList.innerHTML = '';
         
         if (this.patients.length === 0) {
@@ -291,58 +430,94 @@ class DoctorManager {
             name.textContent = `${patient.first_name} ${patient.last_name}`;
             
             contact.appendChild(name);
-            contact.addEventListener('click', () => this.showConversation(patient.id, `${patient.first_name} ${patient.last_name}`));
+            contact.addEventListener('click', () => {
+                console.log(`Conversation avec le patient ${patient.id} sélectionnée`);
+                this.showConversation(patient.id, `${patient.first_name} ${patient.last_name}`);
+            });
             
             this.messageList.appendChild(contact);
         });
     }
     
     /**
-     * Show conversation with a specific user
-     * @param {number} userId - User ID of the conversation partner
-     * @param {string} userName - Name of the conversation partner
+     * Afficher la conversation avec un utilisateur spécifique
+     * @param {number} userId - ID de l'utilisateur de la conversation
+     * @param {string} userName - Nom de l'utilisateur de la conversation
      */
     async showConversation(userId, userName) {
-        this.currentConversationUserId = userId;
-        this.conversationRecipient.textContent = userName;
+        console.log(`Affichage de la conversation avec: ${userName} (ID: ${userId})`);
         
-        this.messageList.style.display = 'none';
-        this.conversation.classList.add('active');
+        this.currentConversationUserId = userId;
+        
+        if (this.conversationRecipient) {
+            this.conversationRecipient.textContent = userName;
+        }
+        
+        if (this.messageList && this.conversation) {
+            this.messageList.style.display = 'none';
+            this.conversation.classList.add('active');
+            
+            // Supprimer la classe hidden pour compatibilité avec les anciens styles
+            this.conversation.classList.remove('hidden');
+        }
         
         await this.loadConversation();
     }
     
     /**
-     * Show message list and hide conversation
+     * Afficher la liste des messages et masquer la conversation
      */
     showMessageList() {
-        this.messageList.style.display = 'block';
-        this.conversation.classList.remove('active');
+        console.log("Retour à la liste des messages");
+        
+        if (this.messageList && this.conversation) {
+            this.messageList.style.display = 'block';
+            this.conversation.classList.remove('active');
+            
+            // Ajouter la classe hidden pour compatibilité avec les anciens styles
+            this.conversation.classList.add('hidden');
+        }
+        
         this.currentConversationUserId = null;
     }
     
     /**
-     * Load conversation with current user
+     * Charger la conversation avec l'utilisateur actuel
      */
     async loadConversation() {
-        if (!this.currentConversationUserId) return;
+        console.log("Chargement de la conversation");
+        
+        if (!this.currentConversationUserId) {
+            console.log("Aucun utilisateur de conversation sélectionné");
+            return;
+        }
         
         try {
             const response = await ApiService.getConversation(this.currentConversationUserId);
             
             if (response.success) {
+                console.log("Conversation chargée:", response.messages);
                 this.renderConversation(response.messages);
+            } else {
+                console.log("Échec du chargement de la conversation:", response.message);
             }
         } catch (error) {
-            console.error('Error loading conversation:', error);
+            console.error('Erreur de chargement de la conversation:', error);
         }
     }
     
     /**
-     * Render conversation messages in the UI
-     * @param {Array} messages - Array of message objects
+     * Afficher les messages de la conversation dans l'interface utilisateur
+     * @param {Array} messages - Tableau d'objets de message
      */
     renderConversation(messages) {
+        console.log("Affichage de la conversation");
+        
+        if (!this.messageContainer) {
+            console.error("Élément messageContainer introuvable");
+            return;
+        }
+        
         this.messageContainer.innerHTML = '';
         
         if (messages.length === 0) {
@@ -354,6 +529,11 @@ class DoctorManager {
         }
         
         const currentUser = window.authManager.getCurrentUser();
+        
+        if (!currentUser) {
+            console.error("Aucun utilisateur connecté");
+            return;
+        }
         
         messages.forEach(message => {
             const messageElement = document.createElement('div');
@@ -373,110 +553,166 @@ class DoctorManager {
             this.messageContainer.appendChild(messageElement);
         });
         
-        // Scroll to bottom
+        // Faire défiler vers le bas
         this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
     }
     
     /**
-     * Send a message in the current conversation
+     * Envoyer un message dans la conversation actuelle
      */
     async sendMessage() {
+        console.log("Envoi d'un message");
+        
+        if (!this.messageInput || !this.currentConversationUserId) {
+            console.error("Élément messageInput introuvable ou aucun destinataire sélectionné");
+            return;
+        }
+        
         const content = this.messageInput.value.trim();
         
-        if (!content || !this.currentConversationUserId) {
+        if (!content) {
+            console.log("Message vide, annulation de l'envoi");
             return;
         }
         
         try {
+            console.log(`Envoi du message au destinataire ${this.currentConversationUserId}: "${content}"`);
             const response = await ApiService.sendMessage(this.currentConversationUserId, content);
             
             if (response.success) {
+                console.log("Message envoyé avec succès");
                 this.messageInput.value = '';
                 await this.loadConversation();
+            } else {
+                console.log("Échec de l'envoi du message:", response.message);
             }
         } catch (error) {
-            console.error('Error sending message:', error);
+            console.error('Erreur d\'envoi de message:', error);
             alert('Erreur lors de l\'envoi du message. Veuillez réessayer.');
         }
     }
     
     /**
-     * Show medication modal for adding a new medication
+     * Afficher la modale d'ajout de médicament
      */
     showMedicationModal() {
-        // Clear input fields
-        this.medicationNameInput.value = '';
-        this.medicationDosageInput.value = '';
+        console.log("Affichage de la modale Médicament");
         
-        // Show modal
-        this.medicationModal.classList.add('active');
+        // Effacer les champs de saisie
+        if (this.medicationNameInput) this.medicationNameInput.value = '';
+        if (this.medicationDosageInput) this.medicationDosageInput.value = '';
+        
+        // Afficher la modale
+        if (this.medicationModal) {
+            this.medicationModal.classList.add('active');
+            // Supprimer la classe hidden pour compatibilité avec les anciens styles
+            this.medicationModal.classList.remove('hidden');
+        }
     }
     
     /**
-     * Hide medication modal
+     * Masquer la modale d'ajout de médicament
      */
     hideMedicationModal() {
-        this.medicationModal.classList.remove('active');
+        console.log("Masquage de la modale Médicament");
+        
+        if (this.medicationModal) {
+            this.medicationModal.classList.remove('active');
+            // Ajouter la classe hidden pour compatibilité avec les anciens styles
+            this.medicationModal.classList.add('hidden');
+        }
     }
     
     /**
-     * Save new medication
+     * Sauvegarder un nouveau médicament
      */
     async saveMedication() {
+        console.log("Sauvegarde d'un nouveau médicament");
+        
+        if (!this.medicationNameInput || !this.medicationDosageInput) {
+            console.error("Éléments de formulaire introuvables");
+            return;
+        }
+        
         const name = this.medicationNameInput.value.trim();
         const dosage = this.medicationDosageInput.value.trim();
         
         if (!name || !dosage) {
+            console.log("Champs incomplets");
             alert('Veuillez remplir tous les champs.');
             return;
         }
         
         try {
+            console.log(`Création d'un nouveau médicament: ${name}, ${dosage}`);
             const response = await ApiService.createMedication(name, dosage);
             
             if (response.success) {
-                // Hide modal
+                console.log("Médicament créé avec succès");
+                // Masquer la modale
                 this.hideMedicationModal();
                 
-                // Reload medications
+                // Recharger les médicaments
                 await this.loadMedications();
+            } else {
+                console.log("Échec de la création du médicament:", response.message);
+                alert('Erreur lors de l\'enregistrement du médicament: ' + (response.message || 'Erreur inconnue'));
             }
         } catch (error) {
-            console.error('Error saving medication:', error);
+            console.error('Erreur de sauvegarde du médicament:', error);
             alert('Erreur lors de l\'enregistrement du médicament. Veuillez réessayer.');
         }
     }
     
     /**
-     * Show prescription modal for adding a new prescription
+     * Afficher la modale d'ajout de prescription
      */
     showPrescriptionModal() {
-        // Reset form
-        this.prescriptionTimeInput.value = '';
+        console.log("Affichage de la modale Prescription");
         
-        // Populate select fields
+        // Réinitialiser le formulaire
+        if (this.prescriptionTimeInput) this.prescriptionTimeInput.value = '';
+        
+        // Remplir les champs de sélection
         this.populatePrescriptionModal();
         
-        // Show modal
-        this.prescriptionModal.classList.add('active');
+        // Afficher la modale
+        if (this.prescriptionModal) {
+            this.prescriptionModal.classList.add('active');
+            // Supprimer la classe hidden pour compatibilité avec les anciens styles
+            this.prescriptionModal.classList.remove('hidden');
+        }
     }
     
     /**
-     * Hide prescription modal
+     * Masquer la modale d'ajout de prescription
      */
     hidePrescriptionModal() {
-        this.prescriptionModal.classList.remove('active');
+        console.log("Masquage de la modale Prescription");
+        
+        if (this.prescriptionModal) {
+            this.prescriptionModal.classList.remove('active');
+            // Ajouter la classe hidden pour compatibilité avec les anciens styles
+            this.prescriptionModal.classList.add('hidden');
+        }
     }
     
     /**
-     * Populate prescription modal with patients and medications
+     * Remplir la modale de prescription avec les patients et les médicaments
      */
     populatePrescriptionModal() {
-        // Clear existing options
+        console.log("Remplissage de la modale Prescription");
+        
+        if (!this.prescriptionPatientSelect || !this.prescriptionMedicationSelect) {
+            console.error("Éléments de sélection introuvables");
+            return;
+        }
+        
+        // Effacer les options existantes
         this.prescriptionPatientSelect.innerHTML = '';
         this.prescriptionMedicationSelect.innerHTML = '';
         
-        // Add patients
+        // Ajouter les patients
         this.patients.forEach(patient => {
             const option = document.createElement('option');
             option.value = patient.id;
@@ -484,7 +720,7 @@ class DoctorManager {
             this.prescriptionPatientSelect.appendChild(option);
         });
         
-        // Add medications
+        // Ajouter les médicaments
         this.medications.forEach(medication => {
             const option = document.createElement('option');
             option.value = medication.id;
@@ -494,49 +730,70 @@ class DoctorManager {
     }
     
     /**
-     * Save new prescription
+     * Sauvegarder une nouvelle prescription
      */
     async savePrescription() {
+        console.log("Sauvegarde d'une nouvelle prescription");
+        
+        if (!this.prescriptionPatientSelect || !this.prescriptionMedicationSelect || 
+            !this.prescriptionMotorSelect || !this.prescriptionTimeInput) {
+            console.error("Éléments de formulaire introuvables");
+            return;
+        }
+        
         const patientId = this.prescriptionPatientSelect.value;
         const medicationId = this.prescriptionMedicationSelect.value;
         const motorNumber = this.prescriptionMotorSelect.value;
         const intakeTime = this.prescriptionTimeInput.value;
         
         if (!patientId || !medicationId || !motorNumber || !intakeTime) {
+            console.log("Champs incomplets");
             alert('Veuillez remplir tous les champs.');
             return;
         }
         
         try {
+            console.log(`Création d'une nouvelle prescription: patient=${patientId}, médicament=${medicationId}, moteur=${motorNumber}, heure=${intakeTime}`);
             const response = await ApiService.createPrescription(patientId, medicationId, motorNumber, intakeTime);
             
             if (response.success) {
-                // Hide modal
+                console.log("Prescription créée avec succès");
+                // Masquer la modale
                 this.hidePrescriptionModal();
                 
-                // Reload prescriptions
+                // Recharger les prescriptions
                 await this.loadPrescriptions();
+            } else {
+                console.log("Échec de la création de la prescription:", response.message);
+                alert('Erreur lors de l\'enregistrement de la prescription: ' + (response.message || 'Erreur inconnue'));
             }
         } catch (error) {
-            console.error('Error saving prescription:', error);
+            console.error('Erreur de sauvegarde de la prescription:', error);
             alert('Erreur lors de l\'enregistrement de la prescription. Veuillez réessayer.');
         }
     }
     
     /**
-     * Deactivate a prescription
-     * @param {number} prescriptionId - ID of the prescription to deactivate
+     * Désactiver une prescription
+     * @param {number} prescriptionId - ID de la prescription à désactiver
      */
     async deactivatePrescription(prescriptionId) {
+        console.log(`Demande de désactivation de la prescription ${prescriptionId}`);
+        
         if (confirm('Êtes-vous sûr de vouloir désactiver cette prescription?')) {
             try {
+                console.log(`Désactivation de la prescription ${prescriptionId}`);
                 const response = await ApiService.deactivatePrescription(prescriptionId);
                 
                 if (response.success) {
+                    console.log("Prescription désactivée avec succès");
                     await this.loadPrescriptions();
+                } else {
+                    console.log("Échec de la désactivation de la prescription:", response.message);
+                    alert('Erreur lors de la désactivation de la prescription: ' + (response.message || 'Erreur inconnue'));
                 }
             } catch (error) {
-                console.error('Error deactivating prescription:', error);
+                console.error('Erreur de désactivation de la prescription:', error);
                 alert('Erreur lors de la désactivation de la prescription. Veuillez réessayer.');
             }
         }

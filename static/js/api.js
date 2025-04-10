@@ -1,22 +1,24 @@
 /**
  * API Service
- * Handles all communication with the backend API
+ * Gère toutes les communications avec le backend API
  */
 class ApiService {
     /**
-     * Send a request to the API
-     * @param {string} endpoint - API endpoint
-     * @param {string} method - HTTP method
-     * @param {object} data - Request data
-     * @returns {Promise} - Response promise
+     * Envoyer une requête à l'API
+     * @param {string} endpoint - Point de terminaison API
+     * @param {string} method - Méthode HTTP
+     * @param {object} data - Données de la requête
+     * @returns {Promise} - Promesse de réponse
      */
     static async request(endpoint, method = 'GET', data = null) {
+        console.log(`API Request: ${method} ${endpoint}`, data);
+        
         const options = {
             method,
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'same-origin' // Include cookies in request
+            credentials: 'same-origin' // Inclure les cookies dans la requête
         };
 
         if (data && (method === 'POST' || method === 'PUT')) {
@@ -25,15 +27,17 @@ class ApiService {
 
         try {
             const response = await fetch(`/api/${endpoint}`, options);
-            return await response.json();
+            const responseData = await response.json();
+            console.log(`API Response: ${method} ${endpoint}`, responseData);
+            return responseData;
         } catch (error) {
-            console.error('API request error:', error);
+            console.error('Erreur de requête API:', error);
             throw error;
         }
     }
 
     /**
-     * Authentication
+     * Authentification
      */
     static async login(username, password) {
         return this.request('login', 'POST', { username, password });
@@ -44,14 +48,14 @@ class ApiService {
     }
 
     /**
-     * Users
+     * Utilisateurs
      */
     static async getUsers(isDoctor) {
         return this.request(`users?is_doctor=${isDoctor}`);
     }
 
     /**
-     * Medications
+     * Médicaments
      */
     static async getMedications() {
         return this.request('medications');
@@ -97,9 +101,29 @@ class ApiService {
     }
 
     /**
-     * Pillbox Control
+     * Contrôle du pilulier
      */
     static async controlPillbox(motorNumber, action) {
         return this.request('pillbox/control', 'POST', { motor_number: motorNumber, action });
+    }
+    
+    /**
+     * Test API - Fonction simplifiée pour tester la connectivité
+     */
+    static async testConnection() {
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: 'test', password: 'test' })
+            });
+            
+            return response.ok;
+        } catch (error) {
+            console.error("Erreur de connexion API:", error);
+            return false;
+        }
     }
 }
